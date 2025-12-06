@@ -72,10 +72,15 @@
                         <strong>Selected Era:</strong>
                         <span id="selectedEra"></span>
                     </div>
+                    <div class="metadata-item">
+                        <button id="openInTabBtn" class="action-btn secondary" style="padding: 10px 20px; font-size: 0.9rem;">
+                            🔗 Open in New Tab
+                        </button>
+                    </div>
                 </div>
 
                 <div id="iframeContainer" class="iframe-container hidden">
-                    <iframe id="waybackFrame" title="Archived Website" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+                    <iframe id="waybackFrame" title="Archived Website" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
                 </div>
 
                 <div id="welcome" class="welcome">

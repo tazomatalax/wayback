@@ -62,6 +62,7 @@ const eraButtons = document.querySelectorAll('.era-btn');
 const nextBtn = document.getElementById('nextBtn');
 const shuffleBtn = document.getElementById('shuffleBtn');
 const retryBtn = document.getElementById('retryBtn');
+const openInTabBtn = document.getElementById('openInTabBtn');
 const loading = document.getElementById('loading');
 const error = document.getElementById('error');
 const errorMessage = document.querySelector('.error-message');
@@ -72,6 +73,9 @@ const welcome = document.getElementById('welcome');
 const originalUrl = document.getElementById('originalUrl');
 const archiveDate = document.getElementById('archiveDate');
 const selectedEra = document.getElementById('selectedEra');
+
+// Store current archive URL
+let currentArchiveUrl = null;
 
 // Initialize app
 function init() {
@@ -88,6 +92,11 @@ function setupEventListeners() {
     nextBtn.addEventListener('click', () => loadRandomSite());
     shuffleBtn.addEventListener('click', () => shuffleAnyEra());
     retryBtn.addEventListener('click', () => loadRandomSite());
+    openInTabBtn.addEventListener('click', () => {
+        if (currentArchiveUrl) {
+            window.open(currentArchiveUrl, '_blank');
+        }
+    });
 }
 
 // Select an era
@@ -127,51 +136,39 @@ async function loadRandomSite() {
 
     try {
         const site = await findAvailableArchive(currentEra);
-        if (site) {
-            displayArchive(site);
-        } else {
-            showError('Unable to find an available archive. Please try again.');
-        }
+        displayArchive(site);
     } catch (err) {
         console.error('Error loading site:', err);
-        showError('An error occurred while searching for archives. Please try again.');
+        showError('An error occurred while loading the archive. Please try again.');
     }
 }
 
 // Find an available archive for the selected era
-async function findAvailableArchive(era, maxAttempts = 5) {
+async function findAvailableArchive(era) {
     const websites = websitesByEra[era];
     
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        // Select random website
-        const domain = getRandomDomain(websites);
-        
-        // Generate random timestamp within era
-        const timestamp = getRandomTimestamp(era);
-        
-        // Check if this URL was recently shown
-        const urlKey = `${domain}-${timestamp}`;
-        if (recentUrls.includes(urlKey)) {
-            continue; // Skip this one and try another
-        }
-
-        // Query Wayback Machine API
-        const archiveUrl = await checkWaybackAvailability(domain, timestamp);
-        
-        if (archiveUrl) {
-            // Add to recent URLs
-            addToRecentUrls(urlKey);
-            
-            return {
-                domain,
-                timestamp,
-                archiveUrl,
-                era
-            };
-        }
-    }
-
-    return null;
+    // Select random website
+    const domain = getRandomDomain(websites);
+    
+    // Generate random timestamp within era
+    const timestamp = getRandomTimestamp(era);
+    
+    // Check if this URL was recently shown
+    const urlKey = `${domain}-${timestamp}`;
+    
+    // Add to recent URLs
+    addToRecentUrls(urlKey);
+    
+    // Construct direct Wayback Machine URL
+    // The wayback machine will automatically redirect to the closest available snapshot
+    const archiveUrl = `https://web.archive.org/web/${timestamp}000000/http://${domain}`;
+    
+    return {
+        domain,
+        timestamp,
+        archiveUrl,
+        era
+    };
 }
 
 // Get random domain from list, avoiding recent ones
@@ -202,34 +199,16 @@ function getRandomTimestamp(era) {
     return `${year}${month}${day}`;
 }
 
-// Check Wayback Machine availability API
-async function checkWaybackAvailability(domain, timestamp) {
-    try {
-        const url = `https://archive.org/wayback/available?url=${domain}&timestamp=${timestamp}`;
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            return null;
-        }
 
-        const data = await response.json();
-        
-        if (data.archived_snapshots && data.archived_snapshots.closest) {
-            return data.archived_snapshots.closest.url;
-        }
-
-        return null;
-    } catch (err) {
-        console.error('Error checking availability:', err);
-        return null;
-    }
-}
 
 // Display the archived site
 function displayArchive(site) {
     hideLoading();
     showMetadata();
     showIframe();
+
+    // Store current archive URL
+    currentArchiveUrl = site.archiveUrl;
 
     // Update metadata
     originalUrl.textContent = site.domain;
@@ -243,7 +222,13 @@ function displayArchive(site) {
     
     selectedEra.textContent = site.era;
 
-    // Load iframe
+    // Load iframe with error handling
+    waybackFrame.onerror = () => {
+        console.warn('Failed to load archive in iframe');
+        showError('This archive could not be loaded. Click "Next Random" to try another site.');
+        hideIframe();
+    };
+    
     waybackFrame.src = site.archiveUrl;
 }
 
