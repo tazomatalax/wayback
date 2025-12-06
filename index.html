@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wayback Nostalgia - Discover random archived websites from the Internet Archive's Wayback Machine">
+    <title>Wayback Nostalgia - Random Website Time Machine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🕰️ Wayback Nostalgia</h1>
+            <p class="subtitle">Discover forgotten corners of the internet</p>
+        </header>
+
+        <main>
+            <section class="controls">
+                <div class="era-selection">
+                    <h2>Select a Time Period</h2>
+                    <div class="era-buttons">
+                        <button class="era-btn" data-era="1996-1999">
+                            <span class="era-years">1996-1999</span>
+                            <span class="era-label">Dawn of the Web</span>
+                        </button>
+                        <button class="era-btn" data-era="2000-2005">
+                            <span class="era-years">2000-2005</span>
+                            <span class="era-label">Dot-com Era</span>
+                        </button>
+                        <button class="era-btn" data-era="2006-2010">
+                            <span class="era-years">2006-2010</span>
+                            <span class="era-label">Web 2.0</span>
+                        </button>
+                        <button class="era-btn" data-era="2011-2015">
+                            <span class="era-years">2011-2015</span>
+                            <span class="era-label">Social Media Boom</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="nextBtn" class="action-btn primary" disabled>
+                        🎲 Next Random
+                    </button>
+                    <button id="shuffleBtn" class="action-btn secondary">
+                        🔀 Shuffle Any Era
+                    </button>
+                </div>
+            </section>
+
+            <section class="display-area">
+                <div id="loading" class="loading hidden">
+                    <div class="spinner"></div>
+                    <p>Searching the archives...</p>
+                </div>
+
+                <div id="error" class="error hidden">
+                    <p class="error-message"></p>
+                    <button id="retryBtn" class="action-btn">Try Again</button>
+                </div>
+
+                <div id="metadata" class="metadata hidden">
+                    <div class="metadata-item">
+                        <strong>Original URL:</strong>
+                        <a id="originalUrl" href="#" target="_blank"></a>
+                    </div>
+                    <div class="metadata-item">
+                        <strong>Archive Date:</strong>
+                        <span id="archiveDate"></span>
+                    </div>
+                    <div class="metadata-item">
+                        <strong>Selected Era:</strong>
+                        <span id="selectedEra"></span>
+                    </div>
+                    <div class="metadata-item">
+                        <button id="openInTabBtn" class="action-btn secondary" style="padding: 10px 20px; font-size: 0.9rem;">
+                            🔗 Open in New Tab
+                        </button>
+                    </div>
+                </div>
+
+                <div id="iframeContainer" class="iframe-container hidden">
+                    <iframe id="waybackFrame" title="Archived Website" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
+                </div>
+
+                <div id="welcome" class="welcome">
+                    <div class="welcome-content">
+                        <h2>🌐 Welcome to Wayback Nostalgia!</h2>
+                        <p>Select a time period above to start exploring random archived websites from different eras of the internet.</p>
+                        <ul>
+                            <li>📺 Discover forgotten websites from the past</li>
+                            <li>🎮 Explore early social media, forums, and Flash game sites</li>
+                            <li>🏛️ Experience the evolution of web design</li>
+                            <li>✨ Relive internet history one random site at a time</li>
+                        </ul>
+                        <p class="note">Tip: Use "Shuffle Any Era" for a random surprise from any time period!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Powered by the <a href="https://archive.org/web/" target="_blank">Internet Archive Wayback Machine</a></p>
+            <p class="disclaimer">This project is not affiliated with the Internet Archive.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

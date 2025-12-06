@@ -16,6 +16,12 @@
 
 Wayback is a web archiving and playback tool that allows users to capture and preserve web content. It provides an IM-style interface for receiving and presenting archived web content, and a search and playback service for retrieving previously archived pages. Wayback is designed to be used by web archivists, researchers, and anyone who wants to preserve web content and access it in the future.
 
+## Wayback Nostalgia - Random Website Time Machine
+
+🎉 **NEW**: Check out [Wayback Nostalgia](./WAYBACK_NOSTALGIA.md), a static web application that lets you explore random archived websites from different eras of the internet! Visit forgotten corners of the web from the 90s, early 2000s, Web 2.0, and the social media boom. Perfect for nostalgia trips and discovering internet history!
+
+[Try it now →](https://tazomatalax.github.io/wayback/) | [Learn more →](./WAYBACK_NOSTALGIA.md)
+
 ## Features
 
 - Free and open-source
